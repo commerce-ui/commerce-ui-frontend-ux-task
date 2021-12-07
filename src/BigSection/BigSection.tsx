@@ -55,6 +55,8 @@ const BigSection: FC = () => {
           className={'hideOnLarge'}
           layout={'fill'}
           objectFit={'cover'}
+          width={undefined}
+          height={undefined}
         />
       </Background>
       <ContentWrap>

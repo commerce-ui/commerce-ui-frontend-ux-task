@@ -1,11 +1,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Container from '../src/Container'
 import Slider from '../src/Slider'
 import { CardProps } from '../src/Card/types'
 import Card from '../src/Card'
 import styled from 'styled-components'
-import Image from 'next/image'
 
 import accessoriesImage from '../public/assets/accessories.jpeg'
 import basketballImage from '../public/assets/basketball.jpeg'
@@ -13,9 +11,6 @@ import golfImage from '../public/assets/golf.jpeg'
 import ivyImage from '../public/assets/ivy.jpeg'
 import legacyImage from '../public/assets/legacy.jpeg'
 import runningImage from '../public/assets/running.jpeg'
-import stanImage from '../public/assets/stan.jpeg'
-import starWarsImage from '../public/assets/star-wars.jpeg'
-import bigImage from '../public/assets/court.jpeg'
 import BigSection from '../src/BigSection'
 import Header from '../src/Header'
 import Footer from '../src/Footer'
@@ -38,6 +33,11 @@ const CARDS_DATA: CardProps[] = [
     media: { resource_type: 'image', ...golfImage }
   },
   {
+    title: 'Winter',
+    href: '/winter',
+    media: { resource_type: 'video', src: '/assets/winter2.mp4', width: 524, height: 700, format: 'mp4' }
+  },
+  {
     title: 'ADIDAS X IVY PARK',
     href: '/adidas-x-ivy-park',
     media: { resource_type: 'image', ...ivyImage }
@@ -51,21 +51,6 @@ const CARDS_DATA: CardProps[] = [
     title: 'Running',
     href: '/running',
     media: { resource_type: 'image', ...runningImage }
-  },
-  {
-    title: 'Winter',
-    href: '/winter',
-    media: { resource_type: 'video', src: '/assets/winter2.mp4', width: 524, height: 700, format: 'mp4' }
-  },
-  {
-    title: 'Stan Smith',
-    href: '/stan-smith',
-    media: { resource_type: 'image', ...stanImage }
-  },
-  {
-    title: 'Star Wars',
-    href: '/star-wars',
-    media: { resource_type: 'image', ...starWarsImage }
   }
 ]
 
