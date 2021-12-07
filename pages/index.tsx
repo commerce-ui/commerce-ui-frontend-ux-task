@@ -51,6 +51,11 @@ const CARDS_DATA: CardProps[] = [
     title: 'Running',
     href: '/running',
     media: { resource_type: 'image', ...runningImage }
+  },
+  {
+    title: 'Ultraboost',
+    href: '/ultraboost',
+    media: { resource_type: 'video', src: '/assets/ultra.mp4', width: 524, height: 700, format: 'mp4' }
   }
 ]
 
