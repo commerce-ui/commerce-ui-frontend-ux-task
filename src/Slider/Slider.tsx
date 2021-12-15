@@ -122,14 +122,14 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
     if (trackRef.current && controlsRef.current) {
       const observer = new IntersectionObserver(
         ([entry]: IntersectionObserverEntry[]) => {
-          const leftButton = controlsRef.current?.firstChild as HTMLButtonElement
-          const rightButton = controlsRef.current?.lastChild as HTMLButtonElement
+          const prevButton = controlsRef.current?.firstChild as HTMLButtonElement
+          const nextButton = controlsRef.current?.lastChild as HTMLButtonElement
 
           if (entry.isIntersecting) {
-            entry.target === trackRef.current?.firstChild ? (leftButton.disabled = true) : (rightButton.disabled = true)
+            entry.target === trackRef.current?.firstChild ? (prevButton.disabled = true) : (nextButton.disabled = true)
           } else {
-            leftButton.disabled = false
-            rightButton.disabled = false
+            prevButton.disabled = false
+            nextButton.disabled = false
           }
         },
         { root: sliderRef.current, rootMargin: '100px', threshold: 1 }
