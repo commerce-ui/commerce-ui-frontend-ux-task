@@ -112,7 +112,11 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
     if (!slide1 || !slide2) return
     const slideWidth = slide1.getBoundingClientRect().width
     const gutterWidth = slide2.getBoundingClientRect().left - slide1.getBoundingClientRect().right
-    const destination = slidesToScroll * slideWidth + slidesToScroll * gutterWidth
+    let destination = slidesToScroll * slideWidth + slidesToScroll * gutterWidth
+    if (!window.matchMedia(`(min-width: ${slideWidth * (Math.abs(slidesToScroll) + 1)}px)`).matches) {
+      const maxSlidesToScroll = Math.sign(slidesToScroll) > 0 ? slidesToScroll - 1 : slidesToScroll + 1
+      destination = maxSlidesToScroll * slideWidth + maxSlidesToScroll * gutterWidth
+    }
     sliderElem.scrollBy({
       left: destination,
       behavior: 'smooth'
