@@ -100,7 +100,7 @@ const Controls = styled.div`
   grid-template-columns: 44px 44px;
   grid-template-rows: 44px;
 
-  & > button:disabled {
+  button:disabled {
     background: gray;
     cursor: default;
 
