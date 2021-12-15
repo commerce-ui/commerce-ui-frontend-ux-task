@@ -121,8 +121,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
   useEffect(() => {
     if (trackRef.current && controlsRef.current) {
       const observer = new IntersectionObserver(
-        (entries: any) => {
-          const [entry] = entries
+        ([entry]: IntersectionObserverEntry[]) => {
           const leftButton = controlsRef.current?.firstChild as HTMLButtonElement
           const rightButton = controlsRef.current?.lastChild as HTMLButtonElement
 
