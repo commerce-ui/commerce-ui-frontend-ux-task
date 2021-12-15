@@ -1,4 +1,4 @@
-import { FC, ReactNode, useRef } from 'react'
+import { FC, ReactNode, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import Container from '../Container'
 import { mq } from '../../styles.config'
@@ -99,10 +99,47 @@ const Controls = styled.div`
   grid-gap: 10px;
   grid-template-columns: 44px 44px;
   grid-template-rows: 44px;
+
+  & > button:disabled {
+    background: gray;
+    cursor: default;
+
+    &:before {
+      border: 1px solid gray;
+      transform: translate(2px, 2px);
+    }
+    &:hover {
+      transform: none;
+    }
+  }
 `
 const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title }) => {
   const sliderRef = useRef<null | HTMLDivElement>(null)
   const trackRef = useRef<null | HTMLDivElement>(null)
+  const controlsRef = useRef<null | HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (trackRef.current && controlsRef.current) {
+      const observer = new IntersectionObserver(
+        (entries: any) => {
+          const [entry] = entries
+          const leftButton = controlsRef.current?.firstChild as HTMLButtonElement
+          const rightButton = controlsRef.current?.lastChild as HTMLButtonElement
+
+          if (entry.isIntersecting) {
+            entry.target === trackRef.current?.firstChild ? (leftButton.disabled = true) : (rightButton.disabled = true)
+          } else {
+            leftButton.disabled = false
+            rightButton.disabled = false
+          }
+        },
+        { root: sliderRef.current, rootMargin: '100px', threshold: 1 }
+      )
+
+      observer.observe(trackRef.current.firstChild as Element)
+      observer.observe(trackRef.current.lastChild as Element)
+    }
+  }, [trackRef, controlsRef])
 
   const scrollSlides = (slidesToScroll: number) => {
     const sliderElem = sliderRef.current
@@ -124,7 +161,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
       <Container>
         <Header>
           <h2>{title}</h2>
-          <Controls>
+          <Controls ref={controlsRef}>
             <button onClick={() => scrollSlides(-2)}>
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
