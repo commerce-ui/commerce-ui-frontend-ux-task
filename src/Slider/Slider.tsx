@@ -1,4 +1,4 @@
-import { FC, ReactNode, useRef, useState } from 'react'
+import { FC, ReactNode, useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Container from '../Container'
 import { mq } from '../../styles.config'
@@ -111,32 +111,34 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
   const [isFirstVisible, setIsFirstVisible] = useState<boolean>(true)
   const [isLastVisible, setIsLastVisible] = useState<boolean>(false)
 
-  const scrollHandler = (sliderElem: HTMLDivElement | null, dest: number = 0) => {
-    if (!sliderElem) return
-    const firstSlide = sliderElem.firstChild?.firstChild as Element
-    const lastSlide = sliderElem.firstChild?.lastChild as Element
-    if (!firstSlide) return
+  useEffect(() => {
+    if (!sliderRef.current) return
 
-    if (firstSlide.getBoundingClientRect().left < 0 + dest) {
-      setIsFirstVisible(false)
-    } else {
-      setIsFirstVisible(true)
+    const firstSlide = sliderRef.current?.firstChild?.firstChild as Element
+    const lastSlide = sliderRef.current?.firstChild?.lastChild as Element
+
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        const entry = entries[0]
+
+        if (entry.isIntersecting) {
+          entry.target === firstSlide ? setIsFirstVisible(true) : setIsLastVisible(true)
+        } else {
+          setIsFirstVisible(false)
+          setIsLastVisible(false)
+        }
+      },
+      { root: sliderRef.current, rootMargin: '100px', threshold: 1 }
+    )
+
+    observer.observe(firstSlide)
+    observer.observe(lastSlide)
+
+    return () => {
+      observer.unobserve(firstSlide)
+      observer.unobserve(lastSlide)
     }
-
-    if (lastSlide.getBoundingClientRect().right > window.innerWidth + dest) {
-      setIsLastVisible(false)
-    } else {
-      setIsLastVisible(true)
-    }
-  }
-
-  const handleTouchEnd = () => {
-    const delay = 500
-
-    setTimeout(() => {
-      scrollHandler(sliderRef.current)
-    }, delay)
-  }
+  }, [sliderRef])
 
   const scrollSlides = (slidesToScroll: number) => {
     const sliderElem = sliderRef.current
@@ -151,8 +153,6 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
       left: destination,
       behavior: 'smooth'
     })
-
-    scrollHandler(sliderElem, destination)
   }
 
   return (
@@ -181,7 +181,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
         </Header>
       </Container>
       <StrictSlider ref={sliderRef}>
-        <Track ref={trackRef} numberOfSlides={children?.length} onTouchEnd={handleTouchEnd}>
+        <Track ref={trackRef} numberOfSlides={children?.length}>
           {children}
         </Track>
       </StrictSlider>
