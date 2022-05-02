@@ -4,6 +4,8 @@ import Slider from '../src/Slider'
 import { CardProps } from '../src/Card/types'
 import Card from '../src/Card'
 import styled from 'styled-components'
+// @ts-ignore
+import 'intersection-observer'
 
 import accessoriesImage from '../public/assets/accessories.jpeg'
 import basketballImage from '../public/assets/basketball.jpeg'
