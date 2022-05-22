@@ -1,4 +1,4 @@
-import { FC, ReactNode, RefObject, useEffect, useRef, useState } from 'react'
+import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Container from '../Container'
 import { mq } from '../../styles.config'
@@ -120,7 +120,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
 
   const initialArrowsState = {
     previous: true, 
-    next:false
+    next: false
   }
   const [disabledArrow, setDisabledArrow] = useState<DisabledArrowsType>(initialArrowsState)
   const [scrolling, setScrolling] = useState(false)
@@ -130,13 +130,12 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
     if (!sliderElem || !sliderElem.firstChild || !sliderElem.lastChild) return
     firstSlideRef.current = sliderElem.firstChild.firstChild as Element
     lastSlideRef.current = sliderElem.firstChild.lastChild as Element
-    
     observer.current = new IntersectionObserver(
       entries => entries.forEach(entry => {
         if(entry.target === firstSlideRef.current) setDisabledArrow(prev => ({...prev, previous: entry.isIntersecting}))
         else setDisabledArrow(prev => ({...prev, next: entry.isIntersecting}))
       }),
-      { threshold: 1, rootMargin: `${firstSlideRef.current.getBoundingClientRect().height}px`}
+      { threshold: 1, rootMargin: `${firstSlideRef.current.getBoundingClientRect().height}px` }
     )
     observer.current.observe(firstSlideRef.current)
     observer.current.observe(lastSlideRef.current)
