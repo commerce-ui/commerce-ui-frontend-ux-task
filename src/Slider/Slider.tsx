@@ -93,6 +93,16 @@ const Header = styled.div`
         transform: translate(2px, 2px);
       }
     }
+
+    &:disabled {
+      color: #ccc;
+      transform: none;
+      cursor: initial;
+      &:before {
+        background-color: #ccc;
+        transform: translate(2px, 2px);
+      }
+    }
   }
 `
 const Controls = styled.div`
@@ -116,7 +126,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
 
   useEffect(() => {
     const sliderElem = sliderRef.current
-    if (!sliderElem || !sliderElem.firstChild) return
+    if (!sliderElem || !sliderElem.firstChild || !sliderElem.lastChild) return
     firstSlideRef.current = sliderElem.firstChild.firstChild as Element
     lastSlideRef.current = sliderElem.firstChild.lastChild as Element
     observer.current =new IntersectionObserver(
@@ -132,8 +142,6 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
   },[sliderRef])
 
   const scrollSlides = (slidesToScroll: number) => {
-    // todo disable click when scrolling
-    console.log('clicked')
     const sliderElem = sliderRef.current
     if (!sliderElem) return
     const slide1 = sliderElem.firstChild?.childNodes[0] as Element
