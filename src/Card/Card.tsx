@@ -11,9 +11,11 @@ const Root = styled.div`
 const ImageWrap = styled.div`
   grid-column: 1;
   grid-row: 1;
+  position: relative;
 
   video {
     width: 100%;
+    height: 100%;
   }
 `
 
@@ -29,7 +31,7 @@ const Card: FC<CardProps> = ({ title, href, media }) => {
   return (
     <Root>
       <ImageWrap>
-        {media.resource_type === 'image' && <Image {...media} />}
+        {media.resource_type === 'image' && <Image {...media} layout='fill' objectFit='cover' />}
 
         {media.resource_type === 'video' && (
           <video autoPlay muted loop playsInline>
