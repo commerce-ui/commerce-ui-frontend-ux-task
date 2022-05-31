@@ -119,6 +119,7 @@ const Controls = styled.div`
 
 function isSlideIntersecting(entry: IntersectionObserverEntry, slide: Element, buttonDisable: Function) {
   if(entry.target === slide) {
+    console.log(entry);
     buttonDisable(entry.isIntersecting)
   }
 }
@@ -147,9 +148,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
       left: destination,
       behavior: 'smooth'
     })
-  }
 
-  useEffect(() => {
     const firstSlideRef = trackRef.current?.firstChild as Element;
     const lastSlideRef = trackRef.current?.lastChild as Element;
 
@@ -161,12 +160,13 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
         isSlideIntersecting(entry, lastSlideRef, setIsLastSlideVisible);
       });
     }, {
-      threshold: 1
+      threshold: 1,
+      rootMargin: "100% 0% 100% 0%"
     })
 
     observerRef.current?.observe(firstSlideRef);
     observerRef.current?.observe(lastSlideRef);
-  })
+  }
 
   return (
     <Root>
