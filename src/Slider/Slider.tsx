@@ -1,4 +1,4 @@
-import { FC, ReactNode, useRef } from 'react'
+import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Container from '../Container'
 import { mq } from '../../styles.config'
@@ -92,6 +92,18 @@ const Header = styled.div`
         transform: translate(2px, 2px);
       }
     }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+      &:hover {
+        transform: unset;
+        &:before {
+          transform: translate(2px, 2px);
+        }
+      }
+      
+    }
   }
 `
 const Controls = styled.div`
@@ -103,6 +115,33 @@ const Controls = styled.div`
 const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title }) => {
   const sliderRef = useRef<null | HTMLDivElement>(null)
   const trackRef = useRef<null | HTMLDivElement>(null)
+  const [leftArrowDisabled, setLeftArrowDisabled] = useState(false)
+  const [rightArrowDisabled, setRightArrowDisabled] = useState(false)
+
+  useEffect(() => {
+    const handleArrowsState = () => {
+      switch (slider.scrollLeft) {
+        case 0:
+          setLeftArrowDisabled(true)
+          break;
+        case slider.scrollWidth - slider.clientWidth:
+          setRightArrowDisabled(true)
+          break;
+        default:
+          setLeftArrowDisabled(false)
+          setRightArrowDisabled(false)
+      }
+    }
+    const cleanUp = () => slider.removeEventListener('scroll', handleArrowsState)
+
+    if (!sliderRef.current) return cleanUp
+    const slider = sliderRef.current
+
+    handleArrowsState()
+    slider.addEventListener('scroll', handleArrowsState)
+
+    return cleanUp
+  }, [])
 
   const scrollSlides = (slidesToScroll: number) => {
     const sliderElem = sliderRef.current
@@ -125,7 +164,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
         <Header>
           <h2>{title}</h2>
           <Controls>
-            <button onClick={() => scrollSlides(-2)}>
+            <button onClick={() => scrollSlides(-2)} disabled={leftArrowDisabled}>
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M6.85355 3.14645C7.04882 3.34171 7.04882 3.65829 6.85355 3.85355L3.70711 7H12.5C12.7761 7 13 7.22386 13 7.5C13 7.77614 12.7761 8 12.5 8H3.70711L6.85355 11.1464C7.04882 11.3417 7.04882 11.6583 6.85355 11.8536C6.65829 12.0488 6.34171 12.0488 6.14645 11.8536L2.14645 7.85355C1.95118 7.65829 1.95118 7.34171 2.14645 7.14645L6.14645 3.14645C6.34171 2.95118 6.65829 2.95118 6.85355 3.14645Z"
@@ -133,7 +172,7 @@ const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title 
                 />
               </svg>
             </button>
-            <button onClick={() => scrollSlides(2)}>
+            <button onClick={() => scrollSlides(2)} disabled={rightArrowDisabled}>
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
