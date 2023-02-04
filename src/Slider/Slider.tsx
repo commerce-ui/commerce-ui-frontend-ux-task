@@ -115,8 +115,8 @@ const Controls = styled.div`
 const Slider: FC<{ children: ReactNode[]; title: string }> = ({ children, title }) => {
   const sliderRef = useRef<null | HTMLDivElement>(null)
   const trackRef = useRef<null | HTMLDivElement>(null)
-  const [leftArrowDisabled, setLeftArrowDisabled] = useState(false)
-  const [rightArrowDisabled, setRightArrowDisabled] = useState(false)
+  const [leftArrowDisabled, setLeftArrowDisabled] = useState<boolean>(false)
+  const [rightArrowDisabled, setRightArrowDisabled] = useState<boolean>(false)
 
   useEffect(() => {
     const handleArrowsState = () => {
