@@ -64,6 +64,7 @@ const Main = styled.div`
   display: grid;
   grid-gap: 100px;
   width: 100%;
+  grid-template-columns: minmax(100px, 1fr);
 `
 
 const Home: NextPage = () => {
