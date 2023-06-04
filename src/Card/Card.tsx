@@ -1,8 +1,9 @@
-import { FC } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { CardProps } from './types'
 import Image from 'next/image'
 import styled from 'styled-components'
 import CtaLink from '../CtaLink'
+import Video from './Video'
 
 const Root = styled.div`
   position: relative;
@@ -32,9 +33,7 @@ const Card: FC<CardProps> = ({ title, href, media }) => {
         {media.resource_type === 'image' && <Image {...media} />}
 
         {media.resource_type === 'video' && (
-          <video autoPlay muted loop playsInline>
-            <source type={'video/' + media.format} src={media.src} />
-          </video>
+            <Video media={media} />
         )}
       </ImageWrap>
       <ContentWrap>
