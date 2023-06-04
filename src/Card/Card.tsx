@@ -3,6 +3,7 @@ import { CardProps } from './types'
 import Image from 'next/image'
 import styled from 'styled-components'
 import CtaLink from '../CtaLink'
+import Video from './Video'
 
 const Root = styled.div`
   position: relative;
@@ -26,36 +27,13 @@ const ContentWrap = styled.div`
 `
 
 const Card: FC<CardProps> = ({ title, href, media }) => {
-
-  const ref = useRef<HTMLVideoElement | null>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-
-    const videoRef = ref.current;
-    const observer = new IntersectionObserver(([entry]) => {
-      
-      if(entry.isIntersecting){
-        ref.current?.play()
-      }else{
-        ref.current?.pause()
-      }
-    }, { threshold: 0.75 });
-
-    observer.observe(videoRef);
-
-    return () => observer.unobserve(videoRef);
-  }, [ref])
-  
   return (
     <Root>
       <ImageWrap>
         {media.resource_type === 'image' && <Image {...media} />}
 
         {media.resource_type === 'video' && (
-            <video ref={ref} muted loop playsInline >
-              <source type={'video/' + media.format} src={media.src} />
-            </video>
+            <Video media={media} />
         )}
       </ImageWrap>
       <ContentWrap>
